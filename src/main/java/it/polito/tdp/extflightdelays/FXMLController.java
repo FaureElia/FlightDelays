@@ -1,8 +1,11 @@
 package it.polito.tdp.extflightdelays;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
+import it.polito.tdp.extflightdelays.model.Airport;
 import it.polito.tdp.extflightdelays.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,10 +31,10 @@ public class FXMLController {
     private TextField compagnieMinimo; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbBoxAeroportoPartenza"
-    private ComboBox<?> cmbBoxAeroportoPartenza; // Value injected by FXMLLoader
+    private ComboBox<Airport> cmbBoxAeroportoPartenza; // Value injected by FXMLLoader
 
     @FXML // fx:id="cmbBoxAeroportoDestinazione"
-    private ComboBox<?> cmbBoxAeroportoDestinazione; // Value injected by FXMLLoader
+    private ComboBox<Airport> cmbBoxAeroportoDestinazione; // Value injected by FXMLLoader
 
     @FXML // fx:id="btnAnalizza"
     private Button btnAnalizza; // Value injected by FXMLLoader
@@ -41,11 +44,34 @@ public class FXMLController {
 
     @FXML
     void doAnalizzaAeroporti(ActionEvent event) {
+    	try {
+    	int N=Integer.parseInt(this.compagnieMinimo.getText());
+    	Set<Airport> aeroporti=this.model.creaGrafo(N);
+    	this.cmbBoxAeroportoDestinazione.getItems().addAll(aeroporti);
+    	this.cmbBoxAeroportoPartenza.getItems().addAll(aeroporti);
+    	
+    	}catch(NumberFormatException e) {
+    		this.txtResult.setText("inserire un numero");	
+    	}
 
     }
 
     @FXML
     void doTestConnessione(ActionEvent event) {
+    	this.txtResult.clear();
+    	Airport partenza=this.cmbBoxAeroportoPartenza.getValue();
+    	Airport destinazione=this.cmbBoxAeroportoDestinazione.getValue();
+    	
+    	if(!partenza.equals(destinazione)) {
+    		List<Airport> percorso=model.verificaConnessione(partenza,destinazione);
+    		for (Airport a:percorso) {
+    			this.txtResult.appendText(a.toString()+"\n");
+    		}
+    	}else {
+    		this.txtResult.setText("Partenza e destinazione uguali!");
+    	}
+    	
+    	
 
     }
 
