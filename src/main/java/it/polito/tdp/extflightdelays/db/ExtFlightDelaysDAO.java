@@ -95,14 +95,11 @@ public class ExtFlightDelaysDAO {
 	
 	
 	public List<Airport> getVertici(int nAirlines,Map<Integer,Airport> idMap){
-		String sql = "SELECT tmp.ID, tmp.IATA_CODE,COUNT(*) as N "
-				+ "FROM "
-				+ "(SELECT a.ID,a.IATA_CODE,f.AIRLINE_ID,COUNT(*) as n "
-				+ "FROM flights f, airports a "
-				+ "WHERE f.ORIGIN_AIRPORT_ID =a.ID OR f.DESTINATION_AIRPORT_ID=a.ID "
-				+ "GROUP BY a.ID,a.IATA_CODE,f.AIRLINE_ID) tmp "
-				+ "GROUP BY tmp.ID, tmp.IATA_CODE "
-				+ "HAVING N>=? ";
+		String sql = "SELECT a.ID, COUNT(DISTINCT f.AIRLINE_ID) AS compagnie "
+				+ "FROM airports a, flights f "
+				+ "WHERE a.ID= f.ORIGIN_AIRPORT_ID OR a.ID=f.DESTINATION_AIRPORT_ID "
+				+ "GROUP BY a.ID "
+				+ "HAVING compagnie>=? ";
 		List<Airport> vertici =new ArrayList<Airport>();
 		try {
 			Connection conn = ConnectDB.getConnection();

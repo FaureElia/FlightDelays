@@ -45,10 +45,10 @@ public class FXMLController {
     @FXML
     void doAnalizzaAeroporti(ActionEvent event) {
     	try {
-    	int N=Integer.parseInt(this.compagnieMinimo.getText());
-    	Set<Airport> aeroporti=this.model.creaGrafo(N);
-    	this.cmbBoxAeroportoDestinazione.getItems().addAll(aeroporti);
-    	this.cmbBoxAeroportoPartenza.getItems().addAll(aeroporti);
+	    	int N=Integer.parseInt(this.compagnieMinimo.getText());
+	    	Set<Airport> aeroporti=this.model.creaGrafo(N);
+	    	this.cmbBoxAeroportoDestinazione.getItems().addAll(aeroporti);
+	    	this.cmbBoxAeroportoPartenza.getItems().addAll(aeroporti);
     	
     	}catch(NumberFormatException e) {
     		this.txtResult.setText("inserire un numero");	
